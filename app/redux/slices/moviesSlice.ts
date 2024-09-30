@@ -14,6 +14,10 @@ interface MoviesState {
   searchTerm: string;
   movieDetail?: MovieDetail;
   movieDetailError?: string | null;
+  filters: {
+    year: string;
+    type: string;
+  };
   
 }
 
@@ -24,6 +28,10 @@ const initialState: MoviesState = {
   page: 1,
   totalResults: 0,
   searchTerm: '',
+  filters: {
+    year: '',
+    type: '',
+  },
 };
 
 export const listenerMiddleware = createListenerMiddleware();
@@ -37,7 +45,8 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     listenerApi.cancelActiveListeners();
 
     await listenerApi.delay(500);
-    const response = await fetchMovies(listenerApi.getState().movies.searchTerm, listenerApi.getState().movies.page);
+    const response = await fetchMovies(listenerApi.getState().movies.searchTerm, listenerApi.getState().movies.page,
+      listenerApi.getState().movies.filters);
 
     if (response.data.Response === 'True') {
       listenerApi.dispatch(fetchMoviesSuccess(response.data))
@@ -54,8 +63,9 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     return currentState.movies.page !== previousState.movies.page;
   },
   effect: async (_action, listenerApi) => {
-    const response = await fetchMovies(listenerApi.getState().movies.searchTerm, listenerApi.getState().movies.page);
-
+    const response = await fetchMovies(listenerApi.getState().movies.searchTerm, listenerApi.getState().movies.page,
+      listenerApi.getState().movies.filters);
+    
     if (response.data.Response === 'True') {
       listenerApi.dispatch(fetchMoreMoviesSuccess(response.data))
      
@@ -118,7 +128,13 @@ const moviesSlice = createSlice({
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
-    }
+    },
+    setYearFilter(state, action: PayloadAction<string>) {
+      state.filters.year = action.payload;
+    },
+    setTypeFilter(state, action: PayloadAction<string>) {
+      state.filters.type = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadMovieDetail.pending, (state) => {

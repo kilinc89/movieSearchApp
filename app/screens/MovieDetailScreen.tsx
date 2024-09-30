@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, Button, ActivityIndicator, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, removeFavorite } from '../redux/slices/favoritesSlice';
 
-import { MovieDetail } from '../types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { fetchMovieDetails } from '../factory/services';
 import { RootStackParamList } from '../navigation/Navigation';
 import { AppDispatch, RootState } from '../redux/storeInterface';
 import { loadMovieDetail } from '../redux/slices/moviesSlice';
