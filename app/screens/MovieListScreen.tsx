@@ -20,7 +20,7 @@ import { Movie } from '../types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/Navigation';
 import { AppDispatch, RootState } from '../redux/storeInterface';
-import { Picker } from '@react-native-picker/picker';
+import BadgeSelector from './components/BadgeSelector';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Movies'>;
 
@@ -74,17 +74,13 @@ const MovieListScreen = ({ navigation }: Props) => {
                     onChangeText={(text) => dispatch(setYearFilter(text))}
                     style={styles.filterInput}
                 />
-                {/* <Picker
+                <BadgeSelector
                     selectedValue={filters.type}
                     onValueChange={(itemValue) => dispatch(setTypeFilter(itemValue))}
-                    style={styles.picker}
-                >
-                    <Picker.Item label="All" value="" />
-                    <Picker.Item label="Movie" value="movie" />
-                    <Picker.Item label="Series" value="series" />
-                    <Picker.Item label="Episode" value="episode" />
-                </Picker> */}
+                />
+
             </View>
+
             {
                 error && searchTerm.length > 0 ?
                     <View style={styles.errorContainer}>
@@ -147,13 +143,15 @@ const styles = StyleSheet.create({
     },
     filterContainer: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         padding: 10,
         backgroundColor: '#f9f9f9'
     },
     filterInput: {
         padding: 10,
         backgroundColor: '#fff',
-        marginRight: 10
+        marginRight: 10,
+        width: "33%"
     },
     picker: {
         height: 50,
