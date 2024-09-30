@@ -13,9 +13,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Details'>;
 const MovieDetailScreen = ({ route }: Props) => {
     const { imdbID } = route.params;
 
-
     const favorites = useSelector((state: RootState) => state.favorites.list);
-    const { list, loading, movieDetail, movieDetailError } = useSelector(
+    const { loading, movieDetail, movieDetailError } = useSelector(
         (state: RootState) => state.movies
     );
     const dispatch = useDispatch<AppDispatch>();

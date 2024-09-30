@@ -13,17 +13,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     setSearchTerm,
     incrementPage,
+    setYearFilter,
+    setTypeFilter,
 } from '../redux/slices/moviesSlice';
 import { Movie } from '../types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/Navigation';
 import { AppDispatch, RootState } from '../redux/storeInterface';
+import { Picker } from '@react-native-picker/picker';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Movies'>;
 
 const MovieListScreen = ({ navigation }: Props) => {
     const dispatch = useDispatch<AppDispatch>();
-    const { list, loading, error, page, totalResults, searchTerm } = useSelector(
+    const { list, loading, error, page, totalResults, searchTerm, filters } = useSelector(
         (state: RootState) => state.movies
     );
 
@@ -65,6 +68,23 @@ const MovieListScreen = ({ navigation }: Props) => {
                 onChangeText={(text) => dispatch(setSearchTerm(text))}
                 style={styles.searchInput}
             />
+            <View style={styles.filterContainer}>
+                <TextInput
+                    placeholder="Year"
+                    onChangeText={(text) => dispatch(setYearFilter(text))}
+                    style={styles.filterInput}
+                />
+                {/* <Picker
+                    selectedValue={filters.type}
+                    onValueChange={(itemValue) => dispatch(setTypeFilter(itemValue))}
+                    style={styles.picker}
+                >
+                    <Picker.Item label="All" value="" />
+                    <Picker.Item label="Movie" value="movie" />
+                    <Picker.Item label="Series" value="series" />
+                    <Picker.Item label="Episode" value="episode" />
+                </Picker> */}
+            </View>
             {
                 error && searchTerm.length > 0 ?
                     <View style={styles.errorContainer}>
@@ -125,4 +145,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    filterContainer: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: '#f9f9f9'
+    },
+    filterInput: {
+        padding: 10,
+        backgroundColor: '#fff',
+        marginRight: 10
+    },
+    picker: {
+        height: 50,
+        width: 150
+    }
 });

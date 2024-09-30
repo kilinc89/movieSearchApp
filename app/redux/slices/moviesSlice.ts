@@ -38,7 +38,9 @@ export const listenerMiddleware = createListenerMiddleware();
 
 listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   predicate: (_action, currentState, previousState) => {
-    return currentState.movies.searchTerm !== previousState.movies.searchTerm 
+    return currentState.movies.searchTerm !== previousState.movies.searchTerm ||
+      currentState.movies.filters.year !== previousState.movies.filters.year ||
+      currentState.movies.filters.type !== previousState.movies.filters.type;
   },
   effect: async (_action, listenerApi) => {
     listenerApi.dispatch(resetMovies());
@@ -159,6 +161,8 @@ export const {
   setSearchTerm,
   incrementPage,
   fetchMoreMoviesSuccess,
+  setYearFilter,
+  setTypeFilter,
   
 } = moviesSlice.actions;
 
