@@ -84,3 +84,6 @@ dist/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+
+apikey.ts
