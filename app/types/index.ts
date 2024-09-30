@@ -7,6 +7,7 @@ export interface Movie {
   }
   
   export interface MovieDetail extends Movie {
+    Response: string;
     Plot: string;
     Genre: string;
     Director: string;

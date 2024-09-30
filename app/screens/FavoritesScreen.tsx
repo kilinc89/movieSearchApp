@@ -49,10 +49,29 @@ const FavoritesScreen = ({ navigation }: Props) => {
 export default FavoritesScreen;
 
 const styles = StyleSheet.create({
-    itemContainer: { flexDirection: 'row', padding: 10 },
-    poster: { width: 50, height: 75 },
-    textContainer: { marginLeft: 10, justifyContent: 'center' },
-    title: { fontSize: 16, fontWeight: 'bold' },
-    year: { fontSize: 14, color: '#666' },
-    emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    itemContainer: {
+        flexDirection: 'row',
+        padding: 10
+    },
+    poster: {
+        width: 50,
+        height: 75
+    },
+    textContainer: {
+        marginLeft: 10,
+        justifyContent: 'center'
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    year: {
+        fontSize: 14,
+        color: '#666'
+    },
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 });

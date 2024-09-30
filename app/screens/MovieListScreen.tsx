@@ -28,10 +28,6 @@ const MovieListScreen = ({ navigation }: Props) => {
     );
 
 
-    const handleSearch = (text: string) => {
-        dispatch(setSearchTerm(text));
-    };
-
     const loadMore = () => {
         if (list.length < totalResults) {
             dispatch(incrementPage());
@@ -66,7 +62,7 @@ const MovieListScreen = ({ navigation }: Props) => {
         <View style={styles.container}>
             <TextInput
                 placeholder="Search Movies..."
-                onChangeText={handleSearch}
+                onChangeText={(text) => dispatch(setSearchTerm(text))}
                 style={styles.searchInput}
             />
             {
@@ -93,13 +89,40 @@ const MovieListScreen = ({ navigation }: Props) => {
 export default MovieListScreen;
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
-    searchInput: { padding: 10, backgroundColor: '#fff' },
-    itemContainer: { flexDirection: 'row', padding: 10 },
-    poster: { width: 50, height: 75 },
-    textContainer: { marginLeft: 10, justifyContent: 'center' },
-    title: { fontSize: 16, fontWeight: 'bold' },
-    year: { fontSize: 14, color: '#666' },
-    loading: { flex: 1, justifyContent: 'center' },
-    errorContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    container: {
+        flex: 1
+    },
+    searchInput: {
+        padding: 10,
+        backgroundColor: '#fff'
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        padding: 10
+    },
+    poster: {
+        width: 50,
+        height: 75
+    },
+    textContainer: {
+        marginLeft: 10,
+        justifyContent: 'center'
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    year: {
+        fontSize: 14,
+        color: '#666'
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center'
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 });

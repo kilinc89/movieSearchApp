@@ -1,7 +1,8 @@
-import { createListenerMiddleware, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { MovieDetail } from './../../types/index';
+import { createAsyncThunk, createListenerMiddleware, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Movie } from '../../types';
 import { AppDispatch, RootState } from '../storeInterface';
-import { fetchMovies } from '../../factory/services';
+import { fetchMovieDetails, fetchMovies } from '../../factory/services';
 
 
 interface MoviesState {
@@ -11,6 +12,9 @@ interface MoviesState {
   page: number;
   totalResults: number;
   searchTerm: string;
+  movieDetail?: MovieDetail;
+  movieDetailError?: string | null;
+  
 }
 
 const initialState: MoviesState = {
@@ -19,7 +23,7 @@ const initialState: MoviesState = {
   error: null,
   page: 1,
   totalResults: 0,
-  searchTerm: 'Batman',
+  searchTerm: '',
 };
 
 export const listenerMiddleware = createListenerMiddleware();
@@ -61,6 +65,22 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   },
 });
 
+export const loadMovieDetail = createAsyncThunk('movies/loadMovieDetail',
+  async (payload: { imdbID: string, }, thunkAPI) => {
+    const { imdbID } = payload;
+
+    try {
+      const response = await fetchMovieDetails(imdbID);
+      return response.data;
+    } catch (err) {
+        console.error(err);
+    } finally {
+      thunkAPI.dispatch(moviesSlice.actions.setLoading(false));
+    }
+    
+});
+
+
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
@@ -95,8 +115,23 @@ const moviesSlice = createSlice({
     },
     incrementPage(state) {
       state.page += 1;
-      console.log('load more page', state.page);
     },
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload;
+    }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loadMovieDetail.pending, (state) => {
+      state.loading = true;
+      state.movieDetailError = null;
+    });
+    builder.addCase(loadMovieDetail.fulfilled, (state, action) => {
+      state.movieDetail = action.payload;
+    });
+    builder.addCase(loadMovieDetail.rejected, (state, action) => {
+      state.loading = false;
+      state.movieDetailError = action.error.message || 'Error fetching movie details';
+    });
   },
 });
 
@@ -107,7 +142,8 @@ export const {
   resetMovies,
   setSearchTerm,
   incrementPage,
-  fetchMoreMoviesSuccess
+  fetchMoreMoviesSuccess,
+  
 } = moviesSlice.actions;
 
 export default moviesSlice.reducer;
