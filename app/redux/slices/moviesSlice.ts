@@ -39,7 +39,8 @@ export const listenerMiddleware = createListenerMiddleware();
 listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   predicate: (_action, currentState, previousState) => {
     return currentState.movies.searchTerm !== previousState.movies.searchTerm ||
-      currentState.movies.filters.year !== previousState.movies.filters.year ||
+      //year must be 4 digits or empty
+      ((currentState.movies.filters.year.length == 4 || currentState.movies.filters.year.length == 0) && currentState.movies.filters.year !== previousState.movies.filters.year) ||
       currentState.movies.filters.type !== previousState.movies.filters.type;
   },
   effect: async (_action, listenerApi) => {
